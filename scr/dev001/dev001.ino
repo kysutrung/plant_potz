@@ -73,12 +73,10 @@ void loop() {
     if (soilMoistureStatus == HIGH) {
       tft.setCursor(25, 140);  
       tft.print("Kho VCL");
-      digitalWrite(PUMP, HIGH);
       Blynk.virtualWrite(V0, 1);
     } else {
       tft.setCursor(25, 140);  
       tft.print("OK roi");
-      digitalWrite(PUMP, LOW);
       Blynk.virtualWrite(V0, 0);
     }
 
@@ -87,4 +85,15 @@ void loop() {
     Blynk.virtualWrite(V3, soilMoistureStatus);
 
     delay(10000);
+}
+
+BLYNK_WRITE(V0)  // Hàm này được gọi khi Virtual Pin V0 thay đổi giá trị
+{
+    int value = param.asInt();  // Lấy giá trị của V0
+    if(value == 0){
+      digitalWrite(PUMP, LOW);
+    }
+    else if(value == 1){
+      digitalWrite(PUMP, HIGH);
+    }
 }
