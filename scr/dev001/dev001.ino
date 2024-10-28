@@ -1,5 +1,11 @@
-// Thực hiện dự án: Nguyen Lam Thanh Tung, Luong Bao Tuan
-// Tên dự án: Smart Plant Pot
+/*==========================================================
+Project name: Smart Plant Pot
+Keyword: IOT
+Platform: Blynk
+Hardware: ESP8266
+Project implementer: Nguyen Lam Thanh Tung, Luong Bao Tuan
+Project developer: Nguyen Duc Trung
+===========================================================*/
 
 #define BLYNK_PRINT Serial
 #define BLYNK_TEMPLATE_ID "TMPL6I10mX5d5"
@@ -8,32 +14,30 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
+// Đặt mật khẩu và tên wifi của mình và đây
+char ssid[] = "Project 01";
+char pass[] = "vnu.edu.vn";
+
+/*
+1.28 Round TFT SCREEN
+CS -> D8 (GPIO15)
+DC -> D3 (GPIO0)
+RES -> D4 (GPIO2)
+SDA (MOSI) -> D7 (GPIO13)
+SCL (SCK) -> D5 (GPIO14)
+*/
 #include <TFT_eSPI.h>
-
 #include <SPI.h>
+TFT_eSPI tft = TFT_eSPI();
+
 #include <DHT.h>
-#define DHTPIN 4         // Chân DATA của DHT21 nối với GPIO4 (D2 trên NodeMCU)
-#define DHTTYPE DHT21    // Loại cảm biến là DHT21 (AM2301)
-#define SOIL_SENSOR_PIN 5  // Chân DO nối với D1 (GPIO5) của ESP8266
-
-#define PUMP 16 // Chân máy bơm nối với D0 tức GPIO16
-
+#define DHTPIN 4         // DHT21 Data PIN -> GPIO4 (D2)
+#define DHTTYPE DHT21
 DHT dht(DHTPIN, DHTTYPE);
 
-TFT_eSPI tft = TFT_eSPI();
-/*
-Ghi chú đấu nối TFT SCREEN
+#define SOIL_SENSOR_PIN 5  // Soil moisture sensor DO PIN -> GPIO5 (D1)
 
-CS -> D8 (GPIO15) trên ESP8266.
-DC -> D3 (GPIO0) trên ESP8266.
-RES -> D4 (GPIO2) trên ESP8266.
-SDA (MOSI) -> D7 (GPIO13) trên ESP8266.
-SCL (SCK) -> D5 (GPIO14) trên ESP8266.
-*/
-
-// Đặt mật khẩu và tên wifi của mình và đây
-char ssid[] = "Le Xuan Hai Idol";
-char pass[] = "hhhhhhhh";
+#define PUMP 16 // 3V water pump VCC PIN -> GPIO16 (D0)
 
 
 void setup() {
@@ -45,14 +49,13 @@ void setup() {
 
     pinMode(PUMP, OUTPUT);
     digitalWrite(PUMP, LOW);
-
-    // tft.pushImage(x, y, 240, 240, ah008);     
+    
     tft.init();
     tft.setRotation(1);
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);  // Chữ màu trắng, nền đen
     tft.setTextSize(3);  // Đặt kích thước chữ (có thể chỉnh để phóng to/thu nhỏ)
-    
+    // tft.pushImage(x, y, 240, 240, ah008); 
 }
 
 void loop() {
