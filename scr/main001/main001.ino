@@ -107,20 +107,13 @@ void loop() {
   }
   else{
     if(soilMoisture < 30){
-    tft.setCursor(60, 180);
-    tft.println(":(");
+    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
     }
     else if(soilMoisture < 40 && airTemperature > 27){
-    tft.setCursor(60, 180);
-    tft.println(":(");
+    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
     }
     else if(soilMoisture < 50 && airTemperature > 30 && airHumidity < 40){
-    tft.setCursor(60, 180);
-    tft.println(":(");
-    }
-    else{
-    tft.setCursor(60, 180);
-    tft.println(":)");
+    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
     }
   }
 
