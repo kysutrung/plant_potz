@@ -60,7 +60,7 @@ void setup() {
   digitalWrite(PUMP, LOW);
   
   tft.init();
-  tft.setRotation(1);
+  tft.setRotation(2);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);  // Chữ màu trắng, nền đen
   tft.setTextSize(3);  // Đặt kích thước chữ (có thể chỉnh để phóng to/thu nhỏ)
