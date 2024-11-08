@@ -39,7 +39,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 #define SOIL_SENSOR_PIN 0  // Soil moisture sensor DO PIN -> GPIO5 (D1)
 
-#define PUMP 16 // 3V water pump VCC PIN -> GPIO16 (D0)
+#define PUMP 5 // 3V water pump VCC PIN -> GPIO5 (D1)
 
 //Biến toàn cục
 bool IS_WATER_PUMP_RUN = 0;
@@ -53,6 +53,7 @@ void setup() {
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
   
   dht.begin();
+  Serial.begin(9600);
   
   pinMode(SOIL_SENSOR_PIN, INPUT);
 
@@ -61,31 +62,40 @@ void setup() {
   
   tft.init();
   tft.setRotation(2);
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_WHITE, TFT_BLACK);  // Chữ màu trắng, nền đen
-  tft.setTextSize(3);  // Đặt kích thước chữ (có thể chỉnh để phóng to/thu nhỏ)
+  tft.fillScreen(TFT_WHITE);
+  tft.setTextColor(TFT_BLACK, TFT_WHITE);
+  tft.setTextSize(3);
   // tft.pushImage(x, y, 240, 240, ah008); 
 }
 
 void loop() {
   Blynk.run();
 
-  tft.fillScreen(TFT_BLACK);
-
   soilMoisture = 100 - ((analogRead(SOIL_SENSOR_PIN) - 650)/num_a);
   airTemperature = dht.readTemperature();
   airHumidity = dht.readHumidity();
 
-  tft.setCursor(60, 60);  
-  tft.print(airHumidity);
-  tft.println(" %");
-  tft.setCursor(25, 100);  
-  tft.print(airTemperature);
-  tft.println(" C");
-  tft.setCursor(25, 140);
-  tft.print(soilMoisture);
-  tft.println(" %");
+  tft.fillScreen(TFT_WHITE);
+  tft.setTextColor(TFT_BLACK, TFT_WHITE);
 
+  if (WiFi.status() != WL_CONNECTED){
+    tft.setCursor(10, 100);
+    tft.println("Disconnected");
+  }
+  else{
+    tft.setCursor(45, 60);  
+    tft.print("H ");
+    tft.print(airHumidity);
+    tft.println("%");
+    tft.setCursor(45, 110);  
+    tft.print("T ");
+    tft.print(airTemperature);
+    tft.println("C");
+    tft.setCursor(45, 160);
+    tft.print("M ");
+    tft.print(soilMoisture);
+    tft.println("%");
+  }
 
   if(IS_AUTO_MODE_ON){
     if(soilMoisture < 30){
@@ -122,6 +132,7 @@ void loop() {
   Blynk.virtualWrite(V1, airTemperature);
   Blynk.virtualWrite(V3, soilMoisture);
   Blynk.virtualWrite(V0, IS_WATER_PUMP_RUN);
+
 
   delay(10000);
 }
