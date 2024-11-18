@@ -47,7 +47,23 @@ bool IS_AUTO_MODE_ON = 1;
 float airHumidity = 0;
 float airTemperature = 0;
 float soilMoisture = 0; //650 -> 1024
-float num_a = 3.74; 
+float num_a = 3.74;
+bool feelSad = 0;
+
+
+void smilez(){
+  tft.fillScreen(11774);
+  tft.drawArc(80, 100, 30, 25, 90, 270, TFT_BLACK, TFT_BLACK);
+  tft.drawArc(160, 100, 30, 25, 90, 270, TFT_BLACK, TFT_BLACK);
+  tft.drawArc(120, 120, 50, 45, 290, 70, TFT_BLACK, TFT_BLACK);
+}
+
+void sadz(){
+  tft.fillScreen(63873);
+  tft.fillCircle(80, 70, 5, TFT_BLACK);
+  tft.fillCircle(160, 70, 5, TFT_BLACK);
+  tft.drawArc(120, 170, 50, 45, 110, 250, TFT_BLACK, TFT_BLACK);
+}
 
 void setup() {
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
@@ -65,7 +81,7 @@ void setup() {
   tft.fillScreen(TFT_WHITE);
   tft.setTextColor(TFT_BLACK, TFT_WHITE);
   tft.setTextSize(3);
-  // tft.pushImage(x, y, 240, 240, ah008); 
+
 }
 
 void loop() {
@@ -75,56 +91,59 @@ void loop() {
   airTemperature = dht.readTemperature();
   airHumidity = dht.readHumidity();
 
-  tft.fillScreen(TFT_WHITE);
-  tft.setTextColor(TFT_BLACK, TFT_WHITE);
-
   if (WiFi.status() != WL_CONNECTED){
+    tft.fillScreen(TFT_WHITE);
+    tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.setCursor(10, 100);
     tft.println("Disconnected");
   }
   else{
-    tft.setCursor(45, 60);  
-    tft.print("H ");
-    tft.print(airHumidity);
-    tft.println("%");
-    tft.setCursor(45, 110);  
-    tft.print("T ");
-    tft.print(airTemperature);
-    tft.println("C");
-    tft.setCursor(45, 160);
-    tft.print("M ");
-    tft.print(soilMoisture);
-    tft.println("%");
+    if(feelSad){
+      sadz();
+    }
+    else{
+      smilez();
+    }
   }
 
   if(IS_AUTO_MODE_ON){
     if(soilMoisture < 30){
+      feelSad = 1;
       digitalWrite(PUMP, HIGH);
       IS_WATER_PUMP_RUN = 1;
     }
     else if(soilMoisture < 40 && airTemperature > 27){
+      feelSad = 1;
       digitalWrite(PUMP, HIGH);
       IS_WATER_PUMP_RUN = 1;
     }
     else if(soilMoisture < 50 && airTemperature > 30 && airHumidity < 40){
+      feelSad = 1;
       digitalWrite(PUMP, HIGH);
       IS_WATER_PUMP_RUN = 1;
     }
     else{
+      feelSad = 0;
       digitalWrite(PUMP, LOW);
       IS_WATER_PUMP_RUN = 0;
     }
   }
   else{
     if(soilMoisture < 30){
-    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      feelSad = 1;
     }
     else if(soilMoisture < 40 && airTemperature > 27){
-    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      feelSad = 1;
     }
     else if(soilMoisture < 50 && airTemperature > 30 && airHumidity < 40){
-    Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      Blynk.logEvent("your_plant_need_water", "Ur plant is thirsty!!!!");
+      feelSad = 1;
     }
+    else{
+      feelSad = 0;
+    } 
   }
 
 
@@ -147,7 +166,6 @@ BLYNK_WRITE(V4)  // Hàm này được gọi khi Virtual Pin V4 thay đổi giá
     }
     else if(value_1 == 1){
       IS_AUTO_MODE_ON = 1;
-      Blynk.virtualWrite(V5, 0);
     }
 }
 
@@ -155,12 +173,11 @@ BLYNK_WRITE(V5)  // Hàm này được gọi khi Virtual Pin V4 thay đổi giá
 {
     int value_2 = param.asInt();  // Lấy giá trị của V4
     if(value_2 == 1){
-      Blynk.virtualWrite(V4, 0);
       digitalWrite(PUMP, HIGH);
       IS_WATER_PUMP_RUN = 1;
     }
-    else{
+    else if(value_2 == 0){
       digitalWrite(PUMP, LOW);
-      IS_WATER_PUMP_RUN = 1;
+      IS_WATER_PUMP_RUN = 0;
     }
 }
