@@ -8,9 +8,14 @@ Project developer: Nguyen Duc Trung
 ===========================================================*/
 
 #define BLYNK_PRINT Serial
-#define BLYNK_TEMPLATE_ID "TMPL6I10mX5d5"
-#define BLYNK_TEMPLATE_NAME "plant potz"
-#define BLYNK_AUTH_TOKEN "zVGuxMgyvz3b5lNrbdO-xHDIjyIqBR9b"
+// #define BLYNK_TEMPLATE_ID "TMPL6I10mX5d5"
+// #define BLYNK_TEMPLATE_NAME "Plant Pot"
+// #define BLYNK_AUTH_TOKEN "zVGuxMgyvz3b5lNrbdO-xHDIjyIqBR9b"
+#define BLYNK_TEMPLATE_ID "TMPL6p4p2SHdQ"
+#define BLYNK_TEMPLATE_NAME "Chau Cay IOT"
+#define BLYNK_AUTH_TOKEN "dnb7zMOT856kDCAtoWHz71vOYjAVRhAn"
+
+
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
