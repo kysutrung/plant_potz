@@ -8,12 +8,12 @@ Project developer: Nguyen Duc Trung
 ===========================================================*/
 
 #define BLYNK_PRINT Serial
-// #define BLYNK_TEMPLATE_ID "TMPL6I10mX5d5"
-// #define BLYNK_TEMPLATE_NAME "Plant Pot"
-// #define BLYNK_AUTH_TOKEN "zVGuxMgyvz3b5lNrbdO-xHDIjyIqBR9b"
-#define BLYNK_TEMPLATE_ID "TMPL6p4p2SHdQ"
-#define BLYNK_TEMPLATE_NAME "Chau Cay IOT"
-#define BLYNK_AUTH_TOKEN "dnb7zMOT856kDCAtoWHz71vOYjAVRhAn"
+#define BLYNK_TEMPLATE_ID "TMPL6I10mX5d5"
+#define BLYNK_TEMPLATE_NAME "Plant Pot"
+#define BLYNK_AUTH_TOKEN "zVGuxMgyvz3b5lNrbdO-xHDIjyIqBR9b"
+// #define BLYNK_TEMPLATE_ID "TMPL6p4p2SHdQ"
+// #define BLYNK_TEMPLATE_NAME "Chau Cay IOT"
+// #define BLYNK_AUTH_TOKEN "dnb7zMOT856kDCAtoWHz71vOYjAVRhAn"
 
 
 #include <ESP8266WiFi.h>
@@ -52,7 +52,8 @@ float airTemperature = 0;
 float soilMoisture = 0; //650 -> 1024
 float num_a = 3.74;
 bool feelSad = 0;
-
+int value_2 = 0;
+int value_1 = 0;
 
 void smilez(){
   tft.fillScreen(11774);
@@ -109,6 +110,13 @@ void loop() {
     }
   }
 
+  if(value_1 == 0){
+    IS_AUTO_MODE_ON = 0;
+  }
+  else if(value_1 == 1){
+    IS_AUTO_MODE_ON = 1;
+  }
+
   if(IS_AUTO_MODE_ON){
     if(soilMoisture < 30){
       feelSad = 1;
@@ -146,33 +154,8 @@ void loop() {
     }
     else{
       feelSad = 0;
-    } 
-  }
-
-
-  Blynk.virtualWrite(V2, airHumidity);
-  Blynk.virtualWrite(V1, airTemperature);
-  Blynk.virtualWrite(V3, soilMoisture);
-  Blynk.virtualWrite(V0, IS_WATER_PUMP_RUN);
-
-
-  delay(10000);
-}
-
-BLYNK_WRITE(V4)
-{
-    int value_1 = param.asInt();
-    if(value_1 == 0){
-      IS_AUTO_MODE_ON = 0;
     }
-    else if(value_1 == 1){
-      IS_AUTO_MODE_ON = 1;
-    }
-}
 
-BLYNK_WRITE(V5)
-{
-    int value_2 = param.asInt();
     if(value_2 == 1){
       digitalWrite(PUMP, HIGH);
       IS_WATER_PUMP_RUN = 1;
@@ -180,5 +163,25 @@ BLYNK_WRITE(V5)
     else if(value_2 == 0){
       digitalWrite(PUMP, LOW);
       IS_WATER_PUMP_RUN = 0;
-    }
+    }    
+  }
+
+
+
+  Blynk.virtualWrite(V2, airHumidity);
+  Blynk.virtualWrite(V1, airTemperature);
+  Blynk.virtualWrite(V3, soilMoisture);
+  Blynk.virtualWrite(V0, IS_WATER_PUMP_RUN);
+
+  delay(5000);
+}
+
+BLYNK_WRITE(V4)
+{
+    value_1 = param.asInt();
+}
+
+BLYNK_WRITE(V5)
+{
+    value_2 = param.asInt();
 }
