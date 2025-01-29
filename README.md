@@ -1,8 +1,6 @@
 ![Photo01](https://github.com/kysutrung/plant_potz/blob/main/mediaaaa/repo_cover1.jpg)
 
-# ALO ALO SỬA COVER ĐÊĐÊ
-
-# IoT Smart Irrigation System using ESP8266
+# PLANT POTZ - IoT Smart Irrigation System
 
 ## Introduction
 This project is an IoT-based smart irrigation system that monitors soil moisture, temperature and humidity to automate plant watering. The system utilizes an ESP8266 microcontroller, soil moisture sensors and temperature & humidity sensors. Users can control the system manually or set it to automatic mode for efficient water usage.
