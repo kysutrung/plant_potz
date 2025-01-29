@@ -1,4 +1,4 @@
-![Photo01](https://github.com/kysutrung/yolo_watchdog/blob/main/mediaa/repo_cover.jpg)
+![Photo01](https://github.com/kysutrung/plant_potz/blob/main/mediaaaa/repo_cover1.jpg)
 
 # ALO ALO SỬA COVER ĐÊĐÊ
 
